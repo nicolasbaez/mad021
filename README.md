@@ -5,34 +5,29 @@
 
 ```processing
 float radio=height*0.75;
-float qPuntos=90;
+float qPuntos=5;
 float j=0;
-float frames=0;
+float kEasing=64;
 void setup() {
   size(512, 256, P3D);
-  background(255);
 }
 void draw() {
+  background(255, 255, 255, 2);
   translate(width/2, height/2, -width/2);
   rotateY(radians(j));
-  //stroke(255);
-  noStroke();
-  for (int i=0; i<=360; i+=360/qPuntos) {
-    float xx=radio*cos(radians(i+j))+width/2;
-    float yy=radio*sin(radians(i+j));
-    if (j<=360) {
-      fill(random(256), random(128), random(64));
-    } else {
-      fill(255);
-    };
-    ellipse(xx, yy, 4, 4);
+  noFill();
+  for (int k=0; k<=kEasing; k++) {
+    beginShape();
+    for (int i=0; i<=360; i+=360/qPuntos) {
+      float xx=radio*cos(radians(i+j))+width/2;
+      float yy=radio*sin(radians(i+j));
+      stroke(random(256), random(256), random(256), map(k, 0, kEasing, 0, 255));
+      vertex(xx, yy, -k);
+    }
+    endShape();
   }
   j++;
-  frames++;
-  if (j>=720) {
-    j=0;
-  }
-  if (frames>=720&&frames<720*2) {
+  if (j>360&&j<=720) {
     saveFrame("gif/mad021-######.png");
   }
 }
